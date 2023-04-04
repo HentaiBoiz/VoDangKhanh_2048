@@ -6,12 +6,31 @@ using UnityEngine.UI;
 
 public class SoundSetting : MonoBehaviour
 {
+    public static SoundSetting Instance;
+
     public Button button;
     public AudioSource music;
     public Image theImage;
 
     public Sprite enableSoundSprite;
     public Sprite disableSoundSprite;
+
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+
+        }
+        else
+        {
+            Debug.Log("Found more than one Sound Setting in the scene");
+            Destroy(gameObject);
+        }
+
+        DontDestroyOnLoad(this.gameObject);
+    }
 
     private void Start()
     {

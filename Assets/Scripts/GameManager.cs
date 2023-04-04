@@ -8,8 +8,12 @@ public class GameManager : MonoBehaviour
 
     public TileBoard board;
     public CanvasGroup gameOver;
+    public CanvasGroup winGame;
+
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI hiscoreText;
+
+    public bool isContinue;
 
     private int score;
 
@@ -39,24 +43,56 @@ public class GameManager : MonoBehaviour
         // reset score
         SetScore(0);
         hiscoreText.text = LoadHiscore().ToString();
+        isContinue = false;
 
         // hide game over screen
-        gameOver.alpha = 0f;
         gameOver.interactable = false;
+        gameOver.alpha = 0f;
+
+
+        // hide win screen
+        winGame.interactable = false;
+        winGame.alpha = 0f;
 
         // update board state
         board.ClearBoard();
         board.CreateTile();
         board.CreateTile();
         board.enabled = true;
+        SoundSetting.Instance.music.Play();
     }
 
     public void GameOver()
     {
-        board.enabled = false;
-        gameOver.interactable = true;
+        End(gameOver);
+        winGame.blocksRaycasts = false;
+    }
 
-        StartCoroutine(Fade(gameOver, 1f, 1f));
+    public void WinTheGame()
+    {
+        End(winGame);
+        gameOver.blocksRaycasts = false;
+    }
+
+    public void End(CanvasGroup canvasGroup)
+    {
+        board.enabled = false;
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
+
+        SoundSetting.Instance.music.Stop();
+        StartCoroutine(Fade(canvasGroup, 1f, 1f));
+    }
+
+    public void CountinueGame()
+    {
+        board.enabled = true;
+        winGame.alpha = 0f;
+        winGame.interactable = false;
+
+        isContinue = true;
+
+        SoundSetting.Instance.music.Play();
     }
 
     private IEnumerator Fade(CanvasGroup canvasGroup, float to, float delay = 0f)

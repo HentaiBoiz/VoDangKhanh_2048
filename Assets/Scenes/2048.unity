@@ -751,7 +751,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &172349266
 RectTransform:
   m_ObjectHideFlags: 0
@@ -785,7 +785,7 @@ CanvasGroup:
   m_Enabled: 1
   m_Alpha: 1
   m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!114 &172349268
 MonoBehaviour:
@@ -1046,7 +1046,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1601929139}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: NewGame
+        m_MethodName: CountinueGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1110,7 +1110,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!82 &308804817
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2194,7 +2194,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2263f4048e4ee584abc4ce910c331908, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 1601929139}
   tilePrefab: {fileID: 7280697964493053281, guid: 44c416fde68735d4a89872ecfe46b239, type: 3}
   tileStates:
   - {fileID: 11400000, guid: e5b365147f709ce48874d5f5492df2b1, type: 2}
@@ -2210,10 +2209,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2d0d3a6ba5b4fcd4c824edc4682d17ef, type: 2}
   - {fileID: 11400000, guid: a4bce3d4979f95a4998b01a1da7bf222, type: 2}
   - {fileID: 11400000, guid: 9ff9b3bf772b6d94cbaeae7c67f7cc44, type: 2}
-  - {fileID: 11400000, guid: 5a2857c81bbf49146aa1bf8fb1a19c4b, type: 2}
-  - {fileID: 11400000, guid: 19b4310b755bd894a999f0202d2f671d, type: 2}
-  - {fileID: 11400000, guid: 0a300fade7d43e94abe37c35dc38c0d9, type: 2}
-  - {fileID: 11400000, guid: 1be54a437c57bd940a0bc02aae22d9be, type: 2}
 --- !u!1 &1095350276
 GameObject:
   m_ObjectHideFlags: 0
@@ -2573,7 +2568,7 @@ CanvasGroup:
   m_Enabled: 1
   m_Alpha: 1
   m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!1 &1207839245
 GameObject:
@@ -3042,8 +3037,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   board: {fileID: 997205597}
   gameOver: {fileID: 1186592820}
+  winGame: {fileID: 172349267}
   scoreText: {fileID: 791552736}
   hiscoreText: {fileID: 67294057}
+  isContinue: 0
 --- !u!4 &1601929140
 Transform:
   m_ObjectHideFlags: 0

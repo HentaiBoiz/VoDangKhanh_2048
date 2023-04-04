@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class TileBoard : MonoBehaviour
 {
-    public GameManager gameManager;
     public Tile tilePrefab;
     public TileState[] tileStates;
 
@@ -34,7 +33,8 @@ public class TileBoard : MonoBehaviour
     public void CreateTile()
     {
         Tile tile = Instantiate(tilePrefab, grid.transform);
-        tile.SetState(tileStates[0], 2);
+        //check  state 0, 9 , 10
+        tile.SetState(tileStates[0], 1024);
         tile.Spawn(grid.GetRandomEmptyCell());
         tiles.Add(tile);
     }
@@ -109,7 +109,7 @@ public class TileBoard : MonoBehaviour
 
     private bool CanMerge(Tile a, Tile b)
     {
-        return a.number == b.number && !b.locked;
+        return a.number == b.number && !b.locked && b.number != 4096;
     }
 
     private void MergeTiles(Tile a, Tile b)
@@ -123,6 +123,13 @@ public class TileBoard : MonoBehaviour
         b.SetState(tileStates[index], number);
 
         GameManager.Instance.IncreaseScore(number);
+
+        if (number == 2048 && GameManager.Instance.isContinue == false)
+        {
+            GameManager.Instance.WinTheGame();
+        }
+        
+        
     }
 
     private int IndexOf(TileState state)
@@ -190,5 +197,4 @@ public class TileBoard : MonoBehaviour
 
         return true;
     }
-
 }
