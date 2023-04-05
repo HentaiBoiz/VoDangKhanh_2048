@@ -59,18 +59,20 @@ public class GameManager : MonoBehaviour
         board.CreateTile();
         board.CreateTile();
         board.enabled = true;
-        SoundSetting.Instance.music.Play();
+        SoundSetting.Instance.OnBackGroundMusic();
     }
 
     public void GameOver()
     {
         End(gameOver);
+        SoundSetting.Instance.OnSFXSound(SoundSetting.Instance.SfxLose);
         winGame.blocksRaycasts = false;
     }
 
     public void WinTheGame()
     {
         End(winGame);
+        SoundSetting.Instance.OnSFXSound(SoundSetting.Instance.sfxWin);
         gameOver.blocksRaycasts = false;
     }
 
@@ -80,7 +82,7 @@ public class GameManager : MonoBehaviour
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
 
-        SoundSetting.Instance.music.Stop();
+        SoundSetting.Instance.OffBackGroundMusic();
         StartCoroutine(Fade(canvasGroup, 1f, 1f));
     }
 
@@ -92,7 +94,7 @@ public class GameManager : MonoBehaviour
 
         isContinue = true;
 
-        SoundSetting.Instance.music.Play();
+        SoundSetting.Instance.OnBackGroundMusic();
     }
 
     private IEnumerator Fade(CanvasGroup canvasGroup, float to, float delay = 0f)

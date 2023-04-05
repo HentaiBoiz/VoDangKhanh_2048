@@ -9,7 +9,11 @@ public class SoundSetting : MonoBehaviour
     public static SoundSetting Instance;
 
     public Button button;
-    public AudioSource music;
+
+    public AudioSource backgroundMusic;
+    public AudioSource sfxWin;
+    public AudioSource SfxLose;
+
     public Image theImage;
 
     public Sprite enableSoundSprite;
@@ -34,7 +38,7 @@ public class SoundSetting : MonoBehaviour
 
     private void Start()
     {
-        if (music.isPlaying)
+        if (backgroundMusic.isPlaying)
         {
             theImage.sprite = enableSoundSprite;
             theImage.color = Color.yellow;
@@ -54,17 +58,37 @@ public class SoundSetting : MonoBehaviour
 
     public void SetSoundIcon()
     {
-        if (music.isPlaying)
+        if (backgroundMusic.isPlaying)
         {
-            theImage.sprite = disableSoundSprite;
-            theImage.color = Color.yellow;
-            music.Pause();
+            OffBackGroundMusic();
         }
         else
         {
-            theImage.sprite = enableSoundSprite;
-            theImage.color = Color.yellow;
-            music.Play();
+            OnBackGroundMusic();
         }
     }
+    public void OffBackGroundMusic()
+    {
+        theImage.sprite = disableSoundSprite;
+        theImage.color = Color.yellow;
+        backgroundMusic.Pause();
+    }
+
+    public void OnBackGroundMusic()
+    {
+        theImage.sprite = enableSoundSprite;
+        theImage.color = Color.yellow;
+        backgroundMusic.Play();
+    }
+
+    public void OnSFXSound(AudioSource sfxMusic)
+    {
+        sfxMusic.Play();
+    }
+
+    public void OffSFXSound(AudioSource sfxMusic)
+    {
+        sfxMusic.Stop();
+    }
+
 }
