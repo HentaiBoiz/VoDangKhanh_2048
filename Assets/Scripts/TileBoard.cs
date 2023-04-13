@@ -11,10 +11,12 @@ public class TileBoard : MonoBehaviour
     private List<Tile> tiles;
     private bool waiting;
 
+    private int checkForWin;
+
     private void Awake()
     {
         grid = GetComponentInChildren<TileGrid>();
-        tiles = new List<Tile>(16);
+        tiles = new List<Tile>(11);
     }
 
     public void ClearBoard()
@@ -124,12 +126,7 @@ public class TileBoard : MonoBehaviour
 
         GameManager.Instance.IncreaseScore(number);
 
-        if (number == 2048 && GameManager.Instance.isContinue == false)
-        {
-            GameManager.Instance.WinTheGame();
-        }
-        
-        
+        checkForWin = number;
     }
 
     private int IndexOf(TileState state)
@@ -163,6 +160,16 @@ public class TileBoard : MonoBehaviour
         if (CheckForGameOver()) {
             GameManager.Instance.GameOver();
         }
+
+        if (checkForWin == 2048 && GameManager.Instance.isContinue == false)
+        {
+            GameManager.Instance.WinTheGame();
+        }
+    }
+
+    public bool CheckForGameWin()
+    {
+        return true;
     }
 
     public bool CheckForGameOver()
