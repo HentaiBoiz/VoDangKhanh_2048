@@ -9,6 +9,8 @@ public class TileBoard : MonoBehaviour
 
     private TileGrid grid;
     private List<Tile> tiles;
+
+    private int tileNumberMax = 4096;
     private bool waiting;
 
     private void Awake()
@@ -33,8 +35,8 @@ public class TileBoard : MonoBehaviour
     public void CreateTile()
     {
         Tile tile = Instantiate(tilePrefab, grid.transform);
-        //check  state 0, 9 , 10
-        tile.SetState(tileStates[0], 1024);
+        //check state 
+        tile.SetState(tileStates[0], 2);
         tile.Spawn(grid.GetRandomEmptyCell());
         tiles.Add(tile);
     }
@@ -109,7 +111,11 @@ public class TileBoard : MonoBehaviour
 
     private bool CanMerge(Tile a, Tile b)
     {
-        return a.number == b.number && !b.locked && b.number != 4096;
+        if (b.number == tileNumberMax)
+        {
+            return false;
+        }
+        return a.number == b.number && !b.locked && b.number != tileNumberMax;
     }
 
     private void MergeTiles(Tile a, Tile b)
@@ -124,9 +130,9 @@ public class TileBoard : MonoBehaviour
 
         GameManager.Instance.IncreaseScore(number);
 
-        if (number == 2048 && GameManager.Instance.isContinue == false)
+        if (number == tileNumberMax/2 && GameManager.Instance.isContinue == false)
         {
-            GameManager.Instance.WinTheGame();
+            GameManager.Instance.KhanhWinTheGame();
         }
     }
 
@@ -158,14 +164,18 @@ public class TileBoard : MonoBehaviour
             CreateTile();
         }
 
-        if (CheckForGameOver()) {
-            GameManager.Instance.GameOver();
+        if (KhanhIsWin())
+        {
+            GameManager.Instance.KhanhWinTheGame();
         }
-    }
+        else
+        {
+            if (CheckForGameOver())
+            {
+                GameManager.Instance.KhanhGameOver();
+            }
+        }
 
-    public bool CheckForGameWin()
-    {
-        return true;
     }
 
     public bool CheckForGameOver()
@@ -194,6 +204,24 @@ public class TileBoard : MonoBehaviour
             }
 
             if (right != null && CanMerge(tile, right.tile)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public bool KhanhIsWin()
+    {
+        if (tiles.Count != grid.size)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < tiles.Count; i++)
+        {
+            if (tiles[i].number < tileNumberMax)
+            {
                 return false;
             }
         }

@@ -45,14 +45,9 @@ public class GameManager : MonoBehaviour
         hiscoreText.text = LoadHiscore().ToString();
         isContinue = false;
 
-        // hide game over screen
-        gameOver.interactable = false;
-        gameOver.alpha = 0f;
-
-
-        // hide win screen
-        winGame.interactable = false;
-        winGame.alpha = 0f;
+        // hide game over and win screen
+        KhanhHidden(gameOver);
+        KhanhHidden(winGame);
 
         // update board state
         board.ClearBoard();
@@ -62,35 +57,36 @@ public class GameManager : MonoBehaviour
         SoundSetting.Instance.OnBackGroundMusic();
     }
 
-    public void GameOver()
+    public void KhanhGameOver()
     {
-        End(gameOver);
+        End(gameOver, winGame);
         SoundSetting.Instance.OnSFXSound(SoundSetting.Instance.SfxLose);
-        winGame.blocksRaycasts = false;
     }
 
-    public void WinTheGame()
+    public void KhanhWinTheGame()
     {
-        End(winGame);
+        End(winGame, gameOver);
         SoundSetting.Instance.OnSFXSound(SoundSetting.Instance.sfxWin);
-        gameOver.blocksRaycasts = false;
     }
 
-    public void End(CanvasGroup canvasGroup)
+    public void End(CanvasGroup canvasGroup1, CanvasGroup canvasGroup2)
     {
         board.enabled = false;
-        canvasGroup.interactable = true;
-        canvasGroup.blocksRaycasts = true;
+
+        canvasGroup1.interactable = true;
+        canvasGroup1.blocksRaycasts = true;
+
+        canvasGroup2.interactable = false;
+        canvasGroup2.blocksRaycasts = false;
 
         SoundSetting.Instance.OffBackGroundMusic();
-        StartCoroutine(Fade(canvasGroup, 1f, 1f));
+        StartCoroutine(Fade(canvasGroup1, 1f, 1f));
     }
 
     public void CountinueGame()
     {
         board.enabled = true;
-        winGame.alpha = 0f;
-        winGame.interactable = false;
+        KhanhHidden(winGame);
 
         isContinue = true;
 
@@ -140,6 +136,11 @@ public class GameManager : MonoBehaviour
     private int LoadHiscore()
     {
         return PlayerPrefs.GetInt("hiscore", 0);
+    }
+    private void KhanhHidden(CanvasGroup canvasGroup)
+    {
+        canvasGroup.interactable = false;
+        canvasGroup.alpha = 0f;
     }
 
 }
