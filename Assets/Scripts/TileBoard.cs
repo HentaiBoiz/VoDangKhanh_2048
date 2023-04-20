@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TileBoard : MonoBehaviour
 {
+    public static TileBoard Instance;
     public Tile tilePrefab;
     public TileState[] tileStates;
 
@@ -35,10 +37,23 @@ public class TileBoard : MonoBehaviour
     public void CreateTile()
     {
         Tile tile = Instantiate(tilePrefab, grid.transform);
-        //check state 
-        tile.SetState(tileStates[0], 2);
+        tile.SetState(tileStates[(int)Math.Log(1024, 2) - 1], 2048);
         tile.Spawn(grid.GetRandomEmptyCell());
         tiles.Add(tile);
+    }
+
+    public void CreateTile(int number, TileCell tileCell)
+    {
+        Tile tile = Instantiate(tilePrefab, grid.transform);
+        tile.SetState(tileStates[(int)Math.Log(number, 2) - 1], number);
+        tile.Spawn(tileCell);
+        tiles.Add(tile);
+
+    }
+
+    public TileGrid getGrid()
+    {
+        return this.grid;
     }
 
     private void Update()
@@ -54,7 +69,9 @@ public class TileBoard : MonoBehaviour
             } else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) {
                 Move(Vector2Int.right, grid.width - 2, -1, 0, 1);
             }
+            PlayerPrefs.Save();
         }
+        
     }
 
     private void Move(Vector2Int direction, int startX, int incrementX, int startY, int incrementY)
