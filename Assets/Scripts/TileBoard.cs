@@ -9,7 +9,7 @@ public class TileBoard : MonoBehaviour
     public Tile tilePrefab;
     public TileState[] tileStates;
 
-    private TileGrid grid;
+    public TileGrid grid;
     private List<Tile> tiles;
 
     private int tileNumberMax = 4096;
@@ -37,7 +37,7 @@ public class TileBoard : MonoBehaviour
     public void CreateTile()
     {
         Tile tile = Instantiate(tilePrefab, grid.transform);
-        tile.SetState(tileStates[(int)Math.Log(1024, 2) - 1], 2048);
+        tile.SetState(tileStates[9], 1024);
         tile.Spawn(grid.GetRandomEmptyCell());
         tiles.Add(tile);
     }
@@ -51,10 +51,6 @@ public class TileBoard : MonoBehaviour
 
     }
 
-    public TileGrid getGrid()
-    {
-        return this.grid;
-    }
 
     private void Update()
     {

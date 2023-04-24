@@ -21,7 +21,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         NewGame();
-        LoadGame();
     }
 
     private void Awake()
@@ -57,20 +56,21 @@ public class GameManager : MonoBehaviour
         board.CreateTile();
         board.enabled = true;
         SoundSetting.Instance.OnBackGroundMusic();
+        ResetKey();
     }
 
     public void KhanhGameOver()
     {
         End(gameOver, winGame);
         SoundSetting.Instance.OnSFXSound(SoundSetting.Instance.SfxLose);
-        File.Delete(Application.dataPath + "/data.save");
+        ResetKey();
     }
 
     public void KhanhWinTheGame()
     {
         End(winGame, gameOver);
         SoundSetting.Instance.OnSFXSound(SoundSetting.Instance.sfxWin);
-        File.Delete(Application.dataPath + "/data.save");
+        ResetKey();
     }
 
     public void End(CanvasGroup canvasGroup1, CanvasGroup canvasGroup2)
@@ -151,54 +151,36 @@ public class GameManager : MonoBehaviour
     {
         if (board.enabled)
         {
-            TileGrid grid = board.getGrid();
-            TileCell[] cells = grid.cells;
-            string saveString = "";
+            TileCell[] cells = board.grid.cells;
+            string saveTiles = "";
             foreach (TileCell cell in cells)
             {
                 if (!cell.empty)
-                    saveString += cell.tile.number.ToString() + "," + cell.coordinates.x.ToString() + "," + cell.coordinates.y.ToString() + ",";
+                    saveTiles += cell.tile.number.ToString() + "," + cell.coordinates.x.ToString() + "," + cell.coordinates.y.ToString() + ",";
             }
-            saveString += "," + score.ToString();
-            File.WriteAllText(Application.dataPath + "/data.save", saveString);
-            Debug.Log(saveString);
+            
+            PlayerPrefs.SetString("Tile", saveTiles);
+            PlayerPrefs.SetInt("score", score);
+            Debug.Log(saveTiles);
         }
     }
 
     public void Load()
     {
-        LoadGame();
-    }
-
-    public bool LoadGame()
-    {
-        if (File.Exists(Application.dataPath + "/data.save"))
+        if (PlayerPrefs.HasKey("Tile"))
         {
             board.ClearBoard();
-            string saveString = File.ReadAllText(Application.dataPath + "/data.save");
+            string loadString = PlayerPrefs.GetString("Tile");
 
-            Debug.Log(saveString + " " + saveString.Length);
-            string[] saveSplit = saveString.Split(',');
-            for (int i = 0; i < saveSplit.Length; i++)
-            {
-                Debug.Log(saveSplit[i]);
-            }
+            string[] saveSplit = loadString.Split(',');
+
             int number = 0;
             int posx = 0;
             int posy = 0;
-            TileGrid grid = board.getGrid();
-
-            TileCell[] cells = grid.cells;
-            for (int i = 0; i < cells.Length; i++)
-            {
-                Debug.Log(cells[i].empty);
-            }
-
             for (int i = 0; i < saveSplit.Length; i++)
             {
                 if (saveSplit[i].Length != 0)
                 {
-                    Debug.Log(saveSplit[i]);
                     if (i % 3 == 0)
                     {
                         number = int.Parse(saveSplit[i]);
@@ -210,18 +192,19 @@ public class GameManager : MonoBehaviour
                     else if (i % 3 == 2)
                     {
                         posy = int.Parse(saveSplit[i]);
-                        board.CreateTile(number, grid.GetCell(posx, posy));
-                        Debug.Log(grid.cells.Length);
+                        board.CreateTile(number, board.grid.GetCell(posx, posy));
                     }
                 }
-                else
-                {
-                    SetScore(int.Parse(saveSplit[i + 1]));
-                }
             }
-            return true;
+            score = PlayerPrefs.GetInt("score");
+            scoreText.text = score.ToString();
         }
-        else return false;
+    }
+
+    public void ResetKey()
+    {
+        PlayerPrefs.DeleteKey("Tile");
+        PlayerPrefs.DeleteKey("score");
     }
 
 }
