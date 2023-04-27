@@ -42,7 +42,7 @@ public class TileBoard : MonoBehaviour
         tiles.Add(tile);
     }
 
-    public void CreateTile(int number, TileCell tileCell)
+    public void LoadTile(int number, TileCell tileCell)
     {
         Tile tile = Instantiate(tilePrefab, grid.transform);
         tile.SetState(tileStates[(int)Math.Log(number, 2) - 1], number);
