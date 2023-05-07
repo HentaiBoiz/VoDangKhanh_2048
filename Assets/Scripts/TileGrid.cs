@@ -52,6 +52,7 @@ public class TileGrid : MonoBehaviour
     public TileCell GetRandomEmptyCell()
     {
         int index = Random.Range(0, cells.Length);
+
         int startingIndex = index;
 
         while (cells[index].occupied)

@@ -37,15 +37,17 @@ public class TileBoard : MonoBehaviour
     public void CreateTile()
     {
         Tile tile = Instantiate(tilePrefab, grid.transform);
-        tile.SetState(tileStates[9], 1024);
+        tile.SetState(tileStates[0], 2);
         tile.Spawn(grid.GetRandomEmptyCell());
         tiles.Add(tile);
     }
 
+
     public void LoadTile(int number, TileCell tileCell)
     {
         Tile tile = Instantiate(tilePrefab, grid.transform);
-        tile.SetState(tileStates[(int)Math.Log(number, 2) - 1], number);
+        
+        tile.SetState(tileStates[(int)Math.Log(2, number)], number);
         tile.Spawn(tileCell);
         tiles.Add(tile);
 

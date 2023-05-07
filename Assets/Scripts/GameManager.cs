@@ -147,19 +147,6 @@ public class GameManager : MonoBehaviour
         canvasGroup.alpha = 0f;
     }
 
-    //public void SaveGame()
-    //{
-    //    TileCell[] cells = board.grid.cells;
-    //    foreach (TileCell cell in cells)
-    //    {
-    //        if (!cell.empty)
-    //            //saveTiles += cell.tile.number.ToString() + "," + cell.coordinates.x.ToString() + "," + cell.coordinates.y.ToString() + ",";
-
-    //    }
-            //PlayerPrefs.SetString("Tile", saveTiles);
-            //PlayerPrefs.SetInt("score", score);
-            //Debug.Log(saveTiles);
-    //}
     public void SaveGame()
     {
         if (board.enabled)
@@ -169,85 +156,64 @@ public class GameManager : MonoBehaviour
             {
                 for (int j = 0; j < board.grid.rows[i].cells.Length; j++)
                 {
-                    if(board.grid.rows[i].cells[j].tile != null) {
+                    if (board.grid.rows[i].cells[j].tile != null)
+                    {
                         saveTiles += board.grid.rows[i].cells[j].tile.number.ToString() + ",";
                     }
                     else
                     {
-                        saveTiles += " " + ",";
+                        saveTiles += "0" + ",";
                     }
-                    
+
                 }
             }
-            
+
             PlayerPrefs.SetString("Tile", saveTiles);
             PlayerPrefs.SetInt("score", score);
             Debug.Log(saveTiles);
         }
     }
 
-    //public void Load()
-    //{
-    //    if (PlayerPrefs.HasKey("Tile"))
-    //    {
-    //        board.ClearBoard();
-    //        string loadString = PlayerPrefs.GetString("Tile");
-
-    //        string[] saveSplit = loadString.Split(',');
-
-    //        int number = 0;
-    //        int posX = 0;
-    //        int posY = 0;
-
-    //        for (int i = 0; i < saveSplit.Length; i++)
-    //        {
-    //            if (saveSplit[i].Length != 0)
-    //            {
-    //                if (i % 3 == 0)
-    //                {
-    //                    number = int.Parse(saveSplit[i]);
-    //                }
-    //                else if (i % 3 == 1)
-    //                {
-    //                    posX = int.Parse(saveSplit[i]);
-    //                }
-    //                else if (i % 3 == 2)
-    //                {
-    //                    posY = int.Parse(saveSplit[i]);
-    //                    board.LoadTile(number, board.grid.GetCell(posX, posY));
-    //                }
-    //                if (i % 3 == 0)
-    //                {
-    //                    number = int.Parse(saveSplit[i]);
-    //                    board.LoadTile(number, board.grid.GetCell(posx, posy));
-    //                }
-    //            }
-    //        }
-    //        score = PlayerPrefs.GetInt("score");
-    //        scoreText.text = score.ToString();
-    //    }
-    //}
     public void Load()
     {
-        
+        // reset score
+        SetScore(0);
+        hiscoreText.text = LoadHiscore().ToString();
+        isContinue = false;
+
+        // hide game over and win screen
+        KhanhHidden(gameOver);
+        KhanhHidden(winGame);
+
+        board.ClearBoard();
+
         string loadString = PlayerPrefs.GetString("Tile","");
+        
         Debug.Log(loadString);
         if (loadString != "")
         {
-            for (int i = 0; i < loadString.Length; i++)
+            string[] tilesArray = loadString.Split(',');
+            for (int x = 0; x < tilesArray.Length - 1; x++)
             {
-                string[] tilesArray = loadString.Split(',');
-                for (int j = 0; j < tilesArray.Length; j++)
-                {
-                    if(tilesArray[j] != " ")
-                    {
-                        board.grid.rows[i].cells[j].tile.number = int.Parse(tilesArray[j]);
-                        Debug.Log(board.grid.rows[i].cells[j].tile.number);
-                    }
-                }
-                    
+                Debug.Log($"{x} : {tilesArray[x]}");
             }
+
+            for (int i = 0; i < board.grid.cells.Length; i++)
+            {
+                if (tilesArray[i] != "0") { 
+                    board.LoadTile(int.Parse(tilesArray[i]), board.grid.cells[i]);
+                }
+                
+            }
+            score = PlayerPrefs.GetInt("score");
+            scoreText.text = score.ToString();
         }
+        else {
+            return;
+        }
+
+        board.enabled = true;
+        SoundSetting.Instance.OnBackGroundMusic();
     }
 
     public void ResetKey()
